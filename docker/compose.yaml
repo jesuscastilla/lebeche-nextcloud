@@ -28,24 +28,3 @@ services:
       - ./apache-mpm.conf:/etc/apache2/mods-available/mpm_prefork.conf:ro
     mem_limit: 900m
 
-  # Office (Nextcloud Office / Collabora CODE).
-  # En este NAS (ARM64 + kernel Synology) hacen falta: cap_add MKNOD+SYS_ADMIN,
-  # seccomp:unconfined y desactivar el seccomp interno de coolwsd
-  # (--o:security.seccomp=false) o los "kit" mueren con EINVAL.
-  collabora:
-    image: collabora/code:26.04.6.1.1
-    container_name: collabora
-    restart: unless-stopped
-    cap_add:
-      - MKNOD
-      - SYS_ADMIN
-    security_opt:
-      - seccomp:unconfined
-    ports:
-      - "9980:9980"
-    environment:
-      TZ: Europe/Madrid
-      aliasgroup1: https://nube.corrientelebeche.es:443
-      extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:num_prespawn_children=1 --o:net.proto=IPv4 --o:security.seccomp=false
-      PROBE_URL: http://127.0.0.1:9980/livez
-    mem_limit: 768m

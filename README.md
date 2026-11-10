@@ -3,7 +3,7 @@
 Nube privada de la asociación Lebeche sobre el NAS Synology DS223 (Docker).
 
 - **URL pública:** `https://nube.corrientelebeche.es`
-- **Office:** Nextcloud Office (Collabora CODE) en `https://office.corrientelebeche.es`
+- **Office:** ❌ RETIRADO (10-11-2026) — Nextcloud Office/Collabora desactivado (no iba bien en este NAS); los documentos se editan en local (LibreOffice/Word) y se suben a la nube.
 - **Calendario compartido:** Nextcloud Calendar (CalDAV en `https://nube.corrientelebeche.es/remote.php/dav/`)
 - **Base de datos:** MariaDB 10 del NAS (puerto 3307, base `nextcloud`)
 - **Datos:** `/volume1/nextcloud` (en el NAS)
