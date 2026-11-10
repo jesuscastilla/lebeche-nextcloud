@@ -1,0 +1,51 @@
+services:
+  nextcloud:
+    image: nextcloud:35.0-apache
+    container_name: nextcloud
+    restart: unless-stopped
+    ports:
+      - "8087:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      TZ: Europe/Madrid
+      MYSQL_HOST: host.docker.internal:3307
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
+      NEXTCLOUD_ADMIN_USER: lebeche
+      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+      NEXTCLOUD_TRUSTED_DOMAINS: "nube.corrientelebeche.es 192.168.50.94 192.168.50.93 localhost"
+      OVERWRITEPROTOCOL: https
+      OVERWRITECLIURL: https://nube.corrientelebeche.es
+      TRUSTED_PROXIES: "127.0.0.1 172.16.0.0/12 192.168.50.0/24"
+      PHP_MEMORY_LIMIT: 512M
+      PHP_UPLOAD_LIMIT: 2G
+      NEXTCLOUD_INIT_HTACCESS: "true"
+    volumes:
+      - ./html:/var/www/html
+      - /volume1/nextcloud:/var/www/html/data
+      - ./apache-mpm.conf:/etc/apache2/mods-available/mpm_prefork.conf:ro
+    mem_limit: 900m
+
+  # Office (Nextcloud Office / Collabora CODE).
+  # En este NAS (ARM64 + kernel Synology) hacen falta: cap_add MKNOD+SYS_ADMIN,
+  # seccomp:unconfined y desactivar el seccomp interno de coolwsd
+  # (--o:security.seccomp=false) o los "kit" mueren con EINVAL.
+  collabora:
+    image: collabora/code:26.04.6.1.1
+    container_name: collabora
+    restart: unless-stopped
+    cap_add:
+      - MKNOD
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "9980:9980"
+    environment:
+      TZ: Europe/Madrid
+      aliasgroup1: https://nube.corrientelebeche.es:443
+      extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:num_prespawn_children=1 --o:net.proto=IPv4 --o:security.seccomp=false
+      PROBE_URL: http://127.0.0.1:9980/livez
+    mem_limit: 768m

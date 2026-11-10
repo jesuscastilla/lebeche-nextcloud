@@ -1,0 +1,13 @@
+# Secretos
+.env
+docker/.env
+*.pem
+*.key
+
+# Contexto local y reglas IA (nunca en git)
+CONTEXT.md
+REGLAS.md
+.cline/
+.clinerules
+.cursor/
+.gemini/
