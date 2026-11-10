@@ -69,6 +69,10 @@ Calendar, Contacts, Mail, Notes, Tasks, Deck, Talk (solo chat), Forms, Polls,
 Bookmarks, External storage, Federation, Photos, Activity, richdocuments
 (Nextcloud Office).
 
+**Mail:** la cuenta `monderas@corrientelebeche.es` (Hostalia) ya está configurada
+para el usuario `monderas` (`occ mail:account:create-imap`). Para más usuarios:
+Ajustes → Correo → Añadir cuenta, o `occ mail:account:create-imap` con sus datos.
+
 **No activar** (RAM 2 GB): Full Text Search, Recognize, Talk HPB, OnlyOffice (4 GB), ClamAV.
 
 ## 8. Calendario compartido
