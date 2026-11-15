@@ -201,3 +201,31 @@ occ config:system:set redis port --type=integer --value=6379
 - Verificar: `docker exec nextcloud-redis redis-cli ping` (PONG) y `dbsize` > 0.
 - Nota 16-11-2026: HPB externo de Spreed Cloud eliminado (`talk:signaling:delete`);
   Talk usa solo el TURN propio (coturn).
+## 17. Office (OnlyOffice) y Talk HPB en el PC auxiliar (16-11-2026)
+
+- **OnlyOffice** corre en el PC auxiliar ZimaOS (`192.168.50.95:9980`, compose en
+  `/tmp/lebeche/onlyoffice`, volumen nombrado `onlyoffice_data`, JWT habilitado).
+  En el NAS:
+
+```bash
+occ app:install onlyoffice && occ app:enable onlyoffice
+occ config:app:set onlyoffice DocumentServerUrl --value="https://office.corrientelebeche.es"
+occ config:app:set onlyoffice jwt_secret --value=<JWT>   # mismo que el compose
+occ onlyoffice:documentserver --check                    # debe decir "successfully connected"
+```
+
+- **Talk HPB** en el PC auxiliar (`192.168.50.95:8081`, imagen
+  `strukturag/nextcloud-spreed-signaling`, backend `https://nube.corrientelebeche.es`,
+  HASH_KEY/BLOCK_KEY/SHARED_SECRET persistentes por env). En el NAS:
+
+```bash
+occ talk:signaling:add https://signaling.corrientelebeche.es/ <SHARED_SECRET> --verify
+occ talk:signaling:list
+```
+
+- **Proxy inverso DSM 7.4**: bloques `server{}` en el w3conf de
+  `/usr/local/etc/nginx/sites-available/` (el JSON `ReverseProxy.json` solo no aplica).
+  El nginx de DSM **elimina la cabecera `Upgrade` del cliente** → en `location /spreed`
+  se fijan `proxy_set_header Upgrade "websocket"` y `Connection "Upgrade"`.
+  HSTS `max-age=15552000` en `nube`, `office` y `signaling`. Certs de origen: los de
+  `pelotxo.synology.me` (Cloudflare modo Full).
