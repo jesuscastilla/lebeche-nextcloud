@@ -184,3 +184,20 @@ SMTP Hostalia (smtp.dominioabsoluto.net:587 TLS, monderas@corrientelebeche.es).
 - `occ circles:manage:config <circle_id> VISIBLE OPEN JOINREQUEST` — el equipo aparece a
   todas las usuarias y cualquiera puede solicitar unirse (confirmación de un moderador).
 - Para desactivar un flag, prefijar con guion bajo (p. ej. `_OPEN`).
+## 16. Redis (memcache: locking y caché distribuida)
+
+- Servicio `redis` en el compose (`redis:7-alpine`, `--save "" --appendonly no`,
+  `--maxmemory 128mb --maxmemory-policy allkeys-lru`, `mem_limit 128m`).
+- Configuración:
+
+```bash
+occ config:system:set memcache.distributed --value='\OC\Memcache\Redis'
+occ config:system:set memcache.locking --value='\OC\Memcache\Redis'
+occ config:system:set redis host --value=nextcloud-redis
+occ config:system:set redis port --type=integer --value=6379
+# luego: docker compose restart nextcloud
+```
+
+- Verificar: `docker exec nextcloud-redis redis-cli ping` (PONG) y `dbsize` > 0.
+- Nota 16-11-2026: HPB externo de Spreed Cloud eliminado (`talk:signaling:delete`);
+  Talk usa solo el TURN propio (coturn).
