@@ -15,6 +15,7 @@ Nube privada de la asociación Lebeche sobre el NAS Synology DS223 (Docker).
 |---|---|
 | `docker/compose.yaml` | Stack Nextcloud + Collabora (desplegado en el NAS) |
 | `docker/apache-mpm.conf` | Límites de Apache (RAM, NAS de 2 GB) |
+| `docker/php-nas.ini` | JIT de OPcache desactivado (SIGSEGV de mod_php, 10-11-2026) |
 | `docker/.env.example` | Plantilla de secretos (el `.env` real vive en el NAS, chmod 600) |
 | `scripts/` | Cron de Nextcloud y volcado semanal de la BD |
 | `docs/GUIA_DESPLIEGUE.md` | Guía completa de despliegue y mantenimiento |

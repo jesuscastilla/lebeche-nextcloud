@@ -26,5 +26,6 @@ services:
       - ./html:/var/www/html
       - /volume1/nextcloud:/var/www/html/data
       - ./apache-mpm.conf:/etc/apache2/mods-available/mpm_prefork.conf:ro
+      - ./php-nas.ini:/usr/local/etc/php/conf.d/zz-nas.ini:ro
     mem_limit: 900m
 

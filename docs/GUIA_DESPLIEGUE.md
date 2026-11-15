@@ -154,3 +154,33 @@ desaparecen, recrearlas también desde Panel de control → Programador de tarea
 default_phone_region ES, maintenance_window_start 1, logtimezone Europe/Madrid,
 memcache.local APCu, background:cron, previews 2048/50, default_quota 20GB,
 SMTP Hostalia (smtp.dominioabsoluto.net:587 TLS, monderas@corrientelebeche.es).
+
+## 13. Talk + TURN (coturn) — reuniones pequeñas
+
+- Contenedor `coturn` en `/volume2/docker/coturn/` (`compose.yaml` + `turnserver.conf`,
+  chown nobody, `network_mode: host`): escucha 3478 TCP/UDP, relay 50000-50100 UDP,
+  `relay-ip=192.168.50.94`, `external-ip=<IP pública>/192.168.50.94`, auth por
+  **shared secret** (en `turnserver.conf`).
+- Talk: `occ talk:turn:add turn pelotxo.synology.me:3478 udp,tcp --secret=<secret>`
+  y `occ talk:stun:add pelotxo.synology.me:3478`.
+- Router: reenviar **3478 TCP/UDP** y **50000–50100 UDP** → `192.168.50.94`.
+  Si cambia la IP pública, actualizar `external-ip` y reiniciar el contenedor.
+- Verificado 15-11-2026 contra la IP pública (TCP 3478 y UDP STUN responden).
+- **Sin HPB**: vale para grupos pequeños (3-8 personas). Para congresos/grupos grandes,
+  montar `nextcloud-spreed-signaling` (+ Redis) en un servidor auxiliar con más RAM.
+
+## 14. Correo compartido de Hostalia (todas las cuentas)
+
+- Crear buzón para una usuaria:
+  `occ mail:account:create-imap <uid> "Correo Lebeche" monderas@corrientelebeche.es
+  imap.dominioabsoluto.net 993 ssl monderas@corrientelebeche.es <pass> smtp.dominioabsoluto.net
+  587 tls monderas@corrientelebeche.es <pass> password`
+- Provisionamiento automático: `~/scripts/mail-provision.sh` (recorre el grupo `Monderas`
+  y crea el buzón donde falte) + crontab diario 05:15. Las cuentas nuevas del grupo lo
+  reciben automáticamente.
+
+## 15. Equipos (Teams) visibles con solicitud de admisión
+
+- `occ circles:manage:config <circle_id> VISIBLE OPEN JOINREQUEST` — el equipo aparece a
+  todas las usuarias y cualquiera puede solicitar unirse (confirmación de un moderador).
+- Para desactivar un flag, prefijar con guion bajo (p. ej. `_OPEN`).
