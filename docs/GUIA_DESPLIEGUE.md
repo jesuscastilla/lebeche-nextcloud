@@ -229,3 +229,10 @@ occ talk:signaling:list
   se fijan `proxy_set_header Upgrade "websocket"` y `Connection "Upgrade"`.
   HSTS `max-age=15552000` en `nube`, `office` y `signaling`. Certs de origen: los de
   `pelotxo.synology.me` (Cloudflare modo Full).
+- **Nota importante (16-11-2026)**: `DocumentServerInternalUrl` **debe acabar en `/`**
+  (`http://192.168.50.95:9980/`); sin barra, la app genera URLs rotas
+  (`...:9980converter`) y fallan las miniaturas/conversiones.
+- La app **oculta sus opciones de "Nuevo"** (Documento/Hoja/Presentación en el menú «+»
+  de Archivos) cuando `config:app:get onlyoffice settingsError` no está vacío: basta con
+  que el `onlyoffice:documentserver --check` falle una vez (p. ej., por un corte de DNS)
+  para que desaparezcan. Si el check vuelve a pasar, el error se limpia solo.
