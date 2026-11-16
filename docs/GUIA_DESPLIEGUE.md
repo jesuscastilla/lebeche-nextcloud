@@ -236,3 +236,43 @@ occ talk:signaling:list
   de Archivos) cuando `config:app:get onlyoffice settingsError` no está vacío: basta con
   que el `onlyoffice:documentserver --check` falle una vez (p. ej., por un corte de DNS)
   para que desaparezcan. Si el check vuelve a pasar, el error se limpia solo.
+## 18. Actualizaciones (Nextcloud, apps y PC auxiliar)
+
+Cadencia recomendada: **1 vez al mes**, y nunca justo antes de un evento importante.
+
+1. **Copia previa de la BD** (en el NAS):
+
+   ```bash
+   bash /volume2/docker/nextcloud/scripts/backup-db.sh
+   ```
+
+   (además hay un backup semanal automático por cron).
+
+2. **Actualizar Nextcloud (misma rama, p. ej. 35.x)**:
+
+   ```bash
+   cd /volume2/docker/nextcloud && docker compose pull && docker compose up -d
+   docker logs -f nextcloud   # el contenedor aplica `occ upgrade` solo al arrancar
+   ```
+
+3. **Tras cada actualización**:
+
+   ```bash
+   occ status
+   occ db:add-missing-indices
+   occ app:update --all
+   # occ maintenance:repair --include-expensive  (solo si algo lo pide)
+   ```
+
+4. **Salto de rama (p. ej. 35 → 36)**: editar `image: nextcloud:36-apache` en
+   `compose.yaml`, comprobar **antes** la compatibilidad de las apps instaladas
+   (onlyoffice, mail, groupfolders, circles, polls…) y hacer backup de BD y, si se puede,
+   del datadir. No saltar de rama sin probar en un entorno de pruebas.
+
+5. **PC auxiliar** (OnlyOffice + HPB): por SSH en el PC:
+
+   ```bash
+   /mnt/overlay/lebeche-tools/lebeche-up.sh   # pull + up de los dos servicios
+   ```
+
+6. Usar solo el canal **estable** (las etiquetas `latest` y `35.0-apache` lo son).
