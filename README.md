@@ -44,7 +44,7 @@ El despliegue en producción se realiza en el NAS a través de Container Manager
 
 ```bash
 # 1. Situarse en el directorio del proyecto en el servidor
-cd /volume2/docker/nextcloud
+cd /volume1/docker/nextcloud
 
 # 2. Levantar el stack de contenedores
 docker compose up -d

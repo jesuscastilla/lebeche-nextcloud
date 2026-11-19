@@ -31,12 +31,12 @@ https://nube.corrientelebeche.es
 
 ## 3. Proyecto Docker
 
-- NAS: `/volume2/docker/nextcloud/` (`compose.yaml`, `apache-mpm.conf`, `.env` chmod 600).
+- NAS: `/volume1/docker/nextcloud/` (`compose.yaml`, `apache-mpm.conf`, `.env` chmod 600).
 - Repo local: `G:\GITHUB\lebeche-nextcloud\docker\`.
 - Comandos:
 
 ```bash
-cd /volume2/docker/nextcloud
+cd /volume1/docker/nextcloud
 sudo docker compose up -d
 sudo docker compose pull && sudo docker compose up -d   # actualizar
 sudo docker logs -f nextcloud
@@ -170,7 +170,7 @@ SMTP Hostalia (smtp.dominioabsoluto.net:587 TLS, monderas@corrientelebeche.es).
 
 ## 13. Talk + TURN (coturn) — reuniones pequeñas
 
-- Contenedor `coturn` en `/volume2/docker/coturn/` (`compose.yaml` + `turnserver.conf`,
+- Contenedor `coturn` en `/volume1/docker/coturn/` (`compose.yaml` + `turnserver.conf`,
   chown nobody, `network_mode: host`): escucha 3478 TCP/UDP, relay 50000-50100 UDP,
   `relay-ip=192.168.50.94`, `external-ip=<IP pública>/192.168.50.94`, auth por
   **shared secret** (en `turnserver.conf`).
@@ -256,7 +256,7 @@ Cadencia recomendada: **1 vez al mes**, y nunca justo antes de un evento importa
 1. **Copia previa de la BD** (en el NAS):
 
    ```bash
-   bash /volume2/docker/nextcloud/scripts/backup-db.sh
+   bash /volume1/docker/nextcloud/scripts/backup-db.sh
    ```
 
    (además hay un backup semanal automático por cron).
@@ -264,7 +264,7 @@ Cadencia recomendada: **1 vez al mes**, y nunca justo antes de un evento importa
 2. **Actualizar Nextcloud (misma rama, p. ej. 35.x)**:
 
    ```bash
-   cd /volume2/docker/nextcloud && docker compose pull && docker compose up -d
+   cd /volume1/docker/nextcloud && docker compose pull && docker compose up -d
    docker logs -f nextcloud   # el contenedor aplica `occ upgrade` solo al arrancar
    ```
 
