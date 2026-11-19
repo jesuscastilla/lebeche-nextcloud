@@ -1,6 +1,7 @@
 services:
   nextcloud:
-    image: nextcloud:35.0-apache
+    # Pineada a 35.0.3 (2026-11-19): evitar pulls silenciosos de la rama 35.0.
+    image: nextcloud:35.0.3-apache
     container_name: nextcloud
     restart: unless-stopped
     ports:
@@ -26,6 +27,21 @@ services:
       - ./html:/var/www/html
       - /volume1/nextcloud:/var/www/html/data
       - ./apache-mpm.conf:/etc/apache2/mods-available/mpm_prefork.conf:ro
+      # JIT off (SIGSEGV de mod_php con PHP 8.5 en aarch64). NO quitar este montaje.
       - ./php-nas.ini:/usr/local/etc/php/conf.d/zz-nas.ini:ro
     mem_limit: 900m
+    # Si mod_php vuelve a colgarse (AH00051), Docker reinicia el contenedor.
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost/status.php"]
+      interval: 2m
+      timeout: 20s
+      retries: 3
+      start_period: 5m
+
+  redis:
+    image: redis:7-alpine
+    container_name: nextcloud-redis
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    mem_limit: 128m
 

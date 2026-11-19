@@ -48,6 +48,14 @@ sudo docker exec -u www-data nextcloud php occ status
 - **JIT de OPcache desactivado (10-11-2026):** montado `php-nas.ini` como
   `/usr/local/etc/php/conf.d/zz-nas.ini` (SIGSEGV de mod_php con PHP 8.5 tras
   cambios de apps). No reactivar.
+  ⚠️ **19-11-2026:** al añadir Redis al compose del NAS se perdió este montaje y la
+  nube volvió a caer (54× `AH00051` al actualizar Calendar 6.7.0 desde la web).
+  **Si se regenera/edita el compose, verificar que `zz-nas.ini` sigue montado**
+  (`docker exec nextcloud php -i | grep opcache.jit` → `off`).
+- **Imagen pineada a `nextcloud:35.0.3-apache`** (19-11-2026): evita pulls
+  silenciosos de la rama móvil `35.0`.
+- **Healthcheck** en el compose (`curl http://localhost/status.php` cada 2 min):
+  si mod_php vuelve a colgarse, Docker reinicia el contenedor automáticamente.
 - **Office retirado (10-11-2026):** el servicio `collabora` ya no está en el compose.
 
 ## 4. Proxy inverso (DSM)
@@ -134,8 +142,12 @@ desaparecen, recrearlas también desde Panel de control → Programador de tarea
 
 ## 11. Actualizaciones
 
-- Pin `35.0-apache`; para saltar de major, `occ upgrade` con la imagen nueva y
-  verificar apps compatibles.
+- Imagen pineada a `35.0.3-apache` (19-11-2026); para saltar de major, `occ upgrade`
+  con la imagen nueva y verificar apps compatibles.
+- ⚠️ **No actualizar apps desde la interfaz web** (`POST /ocs/.../apps/update` de la
+  tienda): fue el disparador de los dos incidentes de segfault (10-11 y 19-11-2026).
+  Actualizar por CLI: `docker exec -u www-data nextcloud php occ app:update --all`
+  en una ventana tranquila y verificar luego `occ status` (maintenance false).
 - Tras actualizar DSM: revisar proxy inverso (certificados de `ReverseProxy_*`),
   `eth1` (USB 2,5G) y `verificar-salud.sh`.
 
@@ -147,7 +159,7 @@ desaparecen, recrearlas también desde Panel de control → Programador de tarea
 | 403/“untrusted domain” | dominio no en trusted_domains | `occ config:system:set trusted_domains N --value=...` |
 | Aviso transaction isolation | se perdió el ajuste | recomprobar `SHOW VARIABLES LIKE '%isolation%'` |
 | 413 al subir | límite Cloudflare 100 MB | usar cliente de escritorio (chunking) |
-| 502 en `nube` + “Empty reply” en el puerto 8087 | segfault de mod_php (`AH00051`) | `docker restart nextcloud`; si reincide, JIT off vía `docker/php-nas.ini` (ya montado, 10-11-2026) |
+| 502 en `nube` + “Empty reply” en el puerto 8087 | segfault de mod_php (`AH00051`, JIT de OPcache activo) | `docker exec nextcloud php -i \| grep opcache.jit` → si no da `off`, recrear con el compose del repo (montaje `php-nas.ini`); si quedó `maintenance: true`, `occ maintenance:mode --off` |
 | RAM al límite | picos de Apache | revisar `apache-mpm.conf` y `docker stats` |
 | “Login is invalid because files already exist for this user” al recrear un usuario | datadir huérfano | mover `data/<usuario>` antes de `occ user:add` |
 
