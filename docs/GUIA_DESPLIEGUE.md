@@ -118,7 +118,7 @@ Ajustes → Correo → Añadir cuenta, o `occ mail:account:create-imap` con sus 
 - Calendarios `lebeche`, `actividades`, `asambleas` **compartidos con el grupo
   `Monderas` (lectura/escritura)** — se comparten por **POST** al calendario con XML
   `{http://owncloud.org/ns}share` (ver histórico de git / CONTEXT.md), no con PROPPATCH.
-- CalDAV para Mondera's App: `https://nube.corrientelebeche.es/remote.php/dav/`
+- CalDAV: `https://nube.corrientelebeche.es/remote.php/dav/`
 
 ## 9. Tareas programadas
 

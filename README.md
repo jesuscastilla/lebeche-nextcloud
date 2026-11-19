@@ -13,7 +13,7 @@ Instancia autohospedada de **Nextcloud** para la **Asociación Cultural y Vecina
 
 - **URL pública:** [https://nube.corrientelebeche.es](https://nube.corrientelebeche.es)
 - **Almacenamiento y archivos:** Sincronización de documentos asociativos por comisiones y grupos de trabajo.
-- **Calendarios compartidos (CalDAV):** `https://nube.corrientelebeche.es/remote.php/dav/` (utilizado por organizadoras y sincronizado con [monderas-app](https://github.com/jesuscastilla/monderas-app)).
+- **Calendarios compartidos (CalDAV):** `https://nube.corrientelebeche.es/remote.php/dav/` (utilizado por las organizadoras).
 - **Libreta de contactos compartida (CardDAV):** Directorio unificado de socias y entidades.
 - **Correo integrado:** Cliente Nextcloud Mail conectado al servicio de correo asociativo.
 - **Base de datos:** MariaDB 10 dedicada (base `nextcloud` en puerto 3307).
@@ -70,6 +70,5 @@ Para instrucciones detalladas sobre la configuración del Proxy Inverso de DSM, 
 | Proyecto | Descripción |
 |---|---|
 | [documentacion-lebeche](https://github.com/jesuscastilla/documentacion-lebeche) | Manuales operativos y guías de uso para Monderas |
-| [monderas-app](https://github.com/jesuscastilla/monderas-app) | App Android con sincronización CalDAV y acceso al NAS |
 | [lebeche-web](https://github.com/jesuscastilla/lebeche-web) | Portal web oficial de la asociación |
 | [lebeche-correo](https://github.com/jesuscastilla/lebeche-correo) | Infraestructura de correo y newsletter |
