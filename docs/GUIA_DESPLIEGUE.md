@@ -91,13 +91,13 @@ trusted_proxies (127.0.0.1, 172.16.0.0/12, 192.168.50.0/24),
 forwarded_for_headers HTTP_X_FORWARDED_FOR, overwriteprotocol https,
 overwrite.cli.url https://nube.corrientelebeche.es, overwritehost nube.corrientelebeche.es,
 
-## 7. Apps habilitadas (46)
+## 7. Apps habilitadas (48)
 
-Calendar, Contacts, Mail, Tasks, Forms, Polls, Photos, Activity, **Deck, Notes, Cospend** (instaladas 19-11-2026) + núcleo (Files, DAV,
+Calendar, Contacts, Mail, Tasks, Forms, Polls, Photos, Activity, **Notes, Cospend, Bookmarks, Picker, Admin Cockpit** (19-11-2026) + núcleo (Files, DAV,
 Sharing, Versiones, Papelera, Visor, 2FA, Texto...).
 
-**Eliminadas (10-11-2026):** `bookmarks`, `richdocuments` (notes/deck/spreed fueron
-reinstaladas después).
+**Eliminadas (10-11-2026):** `richdocuments` (notes/bookmarks/spreed fueron
+reinstaladas después; `deck` se instaló y eliminó de nuevo el 19-11-2026).
 **Deshabilitadas:** `office`, `federation`, `recommendations`, `related_resources`,
 `weather_status`, `user_status`, `support`, `survey_client`, `webhook_listeners`,
 `contactsinteraction`, `files_external`, `admin_audit`, `encryption`, `serverinfo`,
