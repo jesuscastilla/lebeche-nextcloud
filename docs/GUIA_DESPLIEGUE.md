@@ -91,19 +91,20 @@ trusted_proxies (127.0.0.1, 172.16.0.0/12, 192.168.50.0/24),
 forwarded_for_headers HTTP_X_FORWARDED_FOR, overwriteprotocol https,
 overwrite.cli.url https://nube.corrientelebeche.es, overwritehost nube.corrientelebeche.es,
 
-## 7. Apps habilitadas (44)
+## 7. Apps habilitadas (46)
 
-Calendar, Contacts, Mail, Tasks, Forms, Polls, Photos, Activity + núcleo (Files, DAV,
+Calendar, Contacts, Mail, Tasks, Forms, Polls, Photos, Activity, **Deck, Notes, Cospend** (instaladas 19-11-2026) + núcleo (Files, DAV,
 Sharing, Versiones, Papelera, Visor, 2FA, Texto...).
 
-**Eliminadas (10-11-2026):** `notes`, `deck`, `spreed` (Talk), `bookmarks`, `richdocuments`.
+**Eliminadas (10-11-2026):** `bookmarks`, `richdocuments` (notes/deck/spreed fueron
+reinstaladas después).
 **Deshabilitadas:** `office`, `federation`, `recommendations`, `related_resources`,
 `weather_status`, `user_status`, `support`, `survey_client`, `webhook_listeners`,
 `contactsinteraction`, `files_external`, `admin_audit`, `encryption`, `serverinfo`,
 `suspicious_login`, `systemtags`, `twofactor_nextcloud_notification`, `user_ldap`,
-`nextcloud_announcements`.
-No deshabilitables (núcleo): `federatedfilesharing`, `cloud_federation_api`,
-`lookup_server_connector`, `profile`, `workflowengine`.
+`nextcloud_announcements`, `files_downloadlimit`, `files_lock`, `files_reminders`.
+No deshabilitables (núcleo NC 35): `federatedfilesharing`, `cloud_federation_api`,
+`lookup_server_connector`, `profile`, `workflowengine`, `oauth2`, `twofactor_backupcodes`.
 
 **Mail:** la cuenta `monderas@corrientelebeche.es` (Hostalia) ya está configurada
 para el usuario `monderas` (`occ mail:account:create-imap`). Para más usuarios:
